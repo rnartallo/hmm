@@ -36,3 +36,33 @@ def EPR_markov_chain(ss,TP):
         for j in range(0,N):
             Phi+= TP[i,j]*ss[j]*np.log((TP[i,j]*ss[j])/(TP[j,i]*ss[i]))
     return Phi
+
+def markov_chain_to_JTP(MC,N):
+    JTP = np.zeros((N,N))
+    L = len(MC)
+    for t in range(1,L):
+        JTP[MC[t-1],MC[t]]+=1
+    return JTP/(L-1)
+
+
+def EPR_markov_chain_joint(JTP):
+    N = JTP.shape[0]
+    Phi=0
+    for i in range(0,N):
+        for j in range(0,N):
+            if np.min([JTP[i,j],JTP[j,i]])>0:
+                Phi+= JTP[i,j]*np.log((JTP[i,j])/(JTP[j,i]))
+            elif np.max([JTP[i,j],JTP[j,i]])>0:
+                print('Error: EPR diverges')
+                return None
+    return Phi
+
+def EPR_markov_chain_joint_JSD(JTP):
+    N = JTP.shape[0]
+    Phi=0
+    Mix = 0.5*(JTP + np.transpose(JTP))
+    for i in range(0,N):
+        for j in range(0,N):
+            if np.min([JTP[i,j],JTP[j,i]])>0:
+                Phi+= 0.5*JTP[i,j]*np.log((JTP[i,j])/(Mix[i,j])) + 0.5*JTP[j,i]*np.log((JTP[j,i])/(Mix[i,j]))
+    return Phi
