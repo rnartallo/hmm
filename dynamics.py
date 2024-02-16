@@ -44,6 +44,18 @@ def markov_chain_to_JTP(MC,N):
         JTP[MC[t-1],MC[t]]+=1
     return JTP/(L-1)
 
+def markov_chain_to_TP(MC,N):
+    TP = np.zeros((N,N))
+    L = len(MC)
+    bidx = np.array(MC)
+    for i in range(0,N):
+        c=0
+        i_occurences = np.where(bidx==i)[0]
+        for t in i_occurences[:len(i_occurences)-1]:
+            TP[i,MC[t+1]]+=1
+            c+=1
+        TP[i,:]= TP[i,:]/c
+    return TP
 
 def EPR_markov_chain_joint(JTP):
     N = JTP.shape[0]
