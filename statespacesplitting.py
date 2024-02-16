@@ -18,3 +18,14 @@ def state_space_split(X,dimension,boundary_as_list):
     for t in range(0,steps):
         box_index_timecourse.append(box_list.index(list(box_timecourse[t])))
     return(box_timecourse,box_index_timecourse)
+
+def boundary_list(X,dimension_per_direction):
+    boundaries =[]
+    dimension = len(dimension_per_direction)
+    for d in range(0,dimension):
+        x_boundary =[]
+        for i in range(0,dimension_per_direction[d]+1):
+            x_boundary.append(np.quantile(X[d,:],q=i/dimension_per_direction[d]))
+        boundaries.append(x_boundary)
+    return boundaries
+    
