@@ -5,10 +5,10 @@ from scipy.linalg import solve
 def generate_hierarchical_network(N,mu,p0,recip=10):
     W = np.zeros((N,N))
     A = np.zeros((N,N))
-    for n in range(1,N):
+    for n in range(0,N):
         deg = np.sum(A,1)
         rands = np.random.rand(n)
-        for m in range(0,n-1):
+        for m in range(0,n):
             if (np.sum(deg)>0):
                 p = deg[m]/np.sum(deg) + mu
             if np.sum(deg)==0:
