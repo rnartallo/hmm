@@ -67,3 +67,25 @@ def trophic_coherence(W):
             num+=W[i,j]*(h[j]-h[i]-1)**2
             denom = denom + W[i,j]
     return([np.sqrt(1-num/denom),h])
+
+def Laplacian(W):
+    N = W.shape[0]
+    colsum = np.sum(W,0)
+    rowsum = np.sum(W,1)
+    u = colsum + rowsum
+    v = colsum - rowsum
+    Lambda = np.diag(u) - W - np.transpose(W)
+    return Lambda
+
+def LaplaceEigenmodes(W):
+    L = Laplacian(W)
+    eigenValues, eigenVectors = np.linalg.eig(L)
+    idx = eigenValues.argsort()[::-1]
+    eigenValues = eigenValues[idx]
+    eigenVectors = eigenVectors[:,idx]
+    return([eigenValues,eigenVectors])
+
+def LaplaceEigenmodeProjection(W,X):
+    eval, evec = LaplaceEigenmodes(W)
+    Q = np.array(evec)
+    return np.linalg.inv(Q)@X
