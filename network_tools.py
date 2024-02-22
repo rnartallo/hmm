@@ -80,7 +80,7 @@ def Laplacian(W):
 def LaplaceEigenmodes(W):
     L = Laplacian(W)
     eigenValues, eigenVectors = np.linalg.eig(L)
-    idx = eigenValues.argsort()[::-1]
+    idx = eigenValues.argsort()
     eigenValues = eigenValues[idx]
     eigenVectors = eigenVectors[:,idx]
     return([eigenValues,eigenVectors])
